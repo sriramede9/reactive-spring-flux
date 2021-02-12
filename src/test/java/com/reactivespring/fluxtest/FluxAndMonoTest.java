@@ -21,10 +21,19 @@ public class FluxAndMonoTest {
 //
 //	}
 
-	@Test
-	public void fluxTestElements_withoutError() {
-		Flux<String> log = Flux.just("A", "B", "C").log();
+//	@Test
+//	public void fluxTestElements_withoutError() {
+//		Flux<String> log = Flux.just("A", "B", "C").log();
+//
+//		StepVerifier.create(log).expectNext("A", "B", "C").verifyComplete();
+//	}
 
-		StepVerifier.create(log).expectNext("A", "B", "C").verifyComplete();
+	@Test
+	public void fluxTestElements_withError() {
+		Flux<String> log = Flux.just("A", "B", "C").concatWith(Flux.error(new RuntimeException("THrow Error"))).log();
+
+		StepVerifier.create(log).expectNext("A", "B", "E")
+		.verifyErrorMessage("THrow Error");
+//		.verifyComplete();
 	}
 }
